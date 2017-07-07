@@ -1,0 +1,49 @@
+{#
+This Source Code Form is subject to the terms of the Mozilla Public
+License, v. 2.0. If a copy of the MPL was not distributed with this
+file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#}
+
+{% extends 'layouts/base.twig' %}
+
+{% block title %}Home{% endblock %}
+
+{% block metadesc %}Easily compare two YouTube channels' subscriptions with this simple app!{% endblock %}
+
+{% block content %}
+	<div class="jumbotron">
+		<h1>SubCompare</h1>
+
+		<p>
+			Because no one said I had to be good at naming things.
+		</p>
+	</div>
+
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Compare accounts' subscriptions</h3>
+				</div>
+				<div class="panel-body">
+					<form action="{{ path_for('compare') }}" method="get">
+						<div class="form-group">
+							<label for="user1">User 1</label>
+							<input type="text" class="form-control" id="user1" name="user1" placeholder="UCXXXXXXXXXXXXXXXXXXXXXX">
+							<p class="help-block">
+								This is the user's <b>channel ID</b>, which should start with <code>UC</code>. If you aren't sure how to get that, please <a href="https://imgur.com/a/P6Dcm" target="_blank">click here</a>.
+							</p>
+						</div>
+
+						<div class="form-group">
+							<label for="user2">User 2</label>
+							<input type="text" class="form-control" id="user2" name="user2" placeholder="UCXXXXXXXXXXXXXXXXXXXXXX">
+						</div>
+
+						<button type="submit" class="btn btn-default">Submit</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

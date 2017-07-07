@@ -1,0 +1,49 @@
+{#
+This Source Code Form is subject to the terms of the Mozilla Public
+License, v. 2.0. If a copy of the MPL was not distributed with this
+file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#}
+
+{% extends 'layouts/base.twig' %}
+
+{% block title %}About{% endblock %}
+
+{% block metadesc %}If the name doesn't give it away, SubCompare exists to compare two YouTube channels' subscriptions for similarity. It was created at the request of a friend of mine as he was searching for such a service which didn't appear to exist.{% endblock %}
+
+{% block content %}
+	<div class="jumbotron">
+		<h1>About SubCompare</h1>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-12">
+			<h2>What is this for?</h2>
+			<p>
+				If the name doesn't give it away, SubCompare exists to compare two YouTube channels' subscriptions for similarity. It was created at the request of a friend of mine as he was searching for such a service which didn't appear to exist.
+			</p>
+
+			<h2>What's going on here?</h2>
+			<p>
+				This is just a simple front-end wrapper around the <a href="https://developers.google.com/youtube/v3/" target="_blank">YouTube Data API</a> which pulls down the list of two users' subscriptions, does some magic to them, and spits out the common and unique values to each. It's written in PHP, and uses <a href="http://docs.guzzlephp.org/en/stable/" target="_blank">Guzzle</a> as the primary means of communication between Google and the server. The app itself is built on <a href="https://www.slimframework.com/" target="_blank">Slim 3</a> and <a href="https://twig.sensiolabs.org/" target="_blank">Twig 2</a>, and has a bunch of behind-the-scenes caching in place to make things run snappy.
+			</p>
+
+			<h2>Wait, caching? How long does this take to update?</h2>
+			<p>
+				Cache entries expire every 6 hours. If subscriptions change within that period, their changes will not be reflected here, unfortunately.
+			</p>
+
+			<h2>Why does this app take Channel IDs? Why not usernames?</h2>
+			<p>
+				YouTube channel names aren't exactly unique. There's no real unique identifier I can use to compare two channels without setting up some kind of search feature, and I'm lazy.
+			</p>
+
+			<h2>Why do I have to set my subscriptions to public?</h2>
+			<p class="small">
+				... really?			
+			</p>
+			<p>
+				SubCompare uses the Public YouTube Data API to make its requests. Setting subscriptions to public is the only way applications lice SubCompare can access your subscriptions without having to get you to log in or whatever. And since you won't be able to log in as a second user anywa, it's not something that seems feasable to add.
+			</p>
+		</div>
+	</div>
+{% endblock %}

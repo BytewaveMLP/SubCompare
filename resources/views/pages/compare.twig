@@ -1,0 +1,75 @@
+{% extends 'layouts/base.twig' %}
+
+{% macro subblock(id, sub) %}
+	<div class="media">
+		<div class="media-left">
+			<a href="https://www.youtube.com/channel/{{ id }}" target="_blank">
+				<img src="{{ sub.thumbnails.default.url }}" alt="{{ sub.title }}" class="media-object" width="50" height="50">
+			</a>
+		</div>
+		<div class="media-body">
+			<h4 class="media-heading">{{ sub.title }}</h4>
+			<p>
+				{{ sub.description | truncate(100, true) }}
+			</p>
+		</div>
+	</div>
+{% endmacro %}
+
+{% import _self as macros %}
+
+{% block title %}Comparing {{ names.user1 }} and {{ names.user2 }}{% endblock %}
+
+{% block metadesc %}Compare {{ names.user1 }} and {{ names.user2 }} on SubCompare!{% endblock %}
+
+{% block content %}
+	<div class="jumbotron">
+		<h1>Comparison</h1>
+		<p>
+			These are the subscriptions of <a href="https://www.youtube.com/channel/{{ ids.user1 }}" target="_blank">{{ names.user1 }}</a> and <a href="https://www.youtube.com/channel/{{ ids.user2 }}" target="_blank">{{ names.user2 }}</a>.
+		</p>
+		<p>
+			<a href="{{ path_for('home') }}" class="btn btn-default">Go back</a>
+		</p>
+	</div>
+
+	<div class="row">
+		<div class="col-md-4">
+			<h2>Common <small>({{ common | length }})</small></h2>
+
+			{% for id, sub in common %}
+				{{ macros.subblock(id, sub) }}
+			{% else %}
+				<p><b>No common subs to display! :(</b></p>
+			{% endfor %}
+		</div>
+		<div class="col-md-8">
+			<div class="row">
+				<div class="col-md-12">
+					<h2>Unique</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+				<h3>{{ names.user1 }} <small>({{ unique.user1 | length }})</small></h3>
+
+				{% for id, sub in unique.user1 %}
+					{{ macros.subblock(id, sub) }}
+				{% else %}
+					<p><b>No unique subs to display! :(</b></p>
+				{% endfor %}
+			</div>
+
+			<div class="col-md-6">
+				<h3>{{ names.user2 }} <small>({{ unique.user2 | length }})</small></h3>
+
+				{% for id, sub in unique.user2 %}
+					{{ macros.subblock(id, sub) }}
+				{% else %}
+					<p><b>No unique subs to display! :(</b></p>
+				{% endfor %}
+			</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

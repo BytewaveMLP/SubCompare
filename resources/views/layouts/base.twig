@@ -1,0 +1,67 @@
+{#
+This Source Code Form is subject to the terms of the Mozilla Public
+License, v. 2.0. If a copy of the MPL was not distributed with this
+file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#}
+
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>SubCompare - {{ block('title') }}</title>
+
+		<!-- Favicons! -->
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+		<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+		<link rel="icon" type="image/png" href="/favicon-194x194.png" sizes="194x194">
+		<link rel="icon" type="image/png" href="/android-chrome-192x192.png" sizes="192x192">
+		<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+		<link rel="manifest" href="/manifest.json">
+		<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+		<meta name="theme-color" content="#9d00d1">
+
+		<meta name="description" content="{{ block('metadesc') }}">
+		<meta name="robots" content="index, follow">
+		<meta name="author" content="Bytewave">
+
+		<meta property="og:type" content="website">
+		<meta property="og:title" content="SubCompare - {{ block('title') }}">
+		<meta property="og:site_name" content="SubCompare">
+		<meta property="og:url" content="https://subcompare.ponypwnage.com">
+		<meta property="og:description" content="{{ block('metadesc') }}">
+		<meta property="article:author" content="https://bytewave.antigravities.net">
+
+		<meta name="twitter:card" content="summary">
+		<meta name="twitter:site" content="@BytewaveMLP">
+		<meta name="twitter:title" content="SubCompare - {{ block('title') }}">
+		<meta name="twitter:description" content="{{ block('metadesc') }}">
+
+
+		{% if site.theme == 'default' %}
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+		{% else %}
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/latest/{{ site.theme }}/bootstrap.min.css">
+		{% endif %}
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+		<link rel="stylesheet" href="/assets/css/style.css">
+		{% block extracss %}{% endblock %}
+	</head>
+	<body>
+		{% include 'includes/navbar.twig' %}
+
+		<div class="container">
+			{% include 'includes/flash.twig' %}
+		
+			{% block content %}{% endblock %}
+		</div>
+
+		{% include 'includes/footer.twig' %}
+
+		<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/latest/js/bootstrap.min.js"></script>
+		<script src="/assets/js/script.js"></script>
+		{% block extrajs %}{% endblock %}	
+	</body>
+</html>
