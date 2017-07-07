@@ -51,7 +51,7 @@ At this point, install your `nginx` configs if necessary and restart your webser
 
 ## Usage
 
-Simply browse to your configured domain. SubCompare will present a form with two boxes for channel IDs. Just paste the channels you want to compare into the box, and click Submit. SubCompare will handle the rest.
+Simply browse to your configured domain. SubCompare will present a form with two boxes for channel IDs (if you aren't sure how to get your channel ID, [click here](https://imgur.com/a/P6Dcm)). Just paste the channels you want to compare into the box, and click Submit. SubCompare will handle the rest.
 
 ## Maintainers
 

@@ -15,7 +15,7 @@ class CompareController extends Controller {
 	const CACHE_EXPIRE_AFTER = 60 * 60 * 6;
 
 	const GUZZLE_DEFAULT_OPTIONS = [
-		'verify' => false,
+		'verify' => false, // TODO: Make this true once cacert.pem stops being annoying
 		'http_errors' => true,
 	];
 
