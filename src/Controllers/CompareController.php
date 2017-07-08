@@ -19,12 +19,34 @@ class CompareController extends Controller {
 		'http_errors' => true,
 	];
 
+	const PARAMETER_MISSING = "<b>Um...</b> Seems like you're missing user %d's ID.";
 	const COULDNT_FIND_USER = "<b>Whoops!</b> Looks like we couldn't find user %d! Verify that the channel ID is correct, then try again.";
 	const USER_SUBS_PRIVATE = "<b>Whoops!</b> Looks like user %d's subscriptions settings are set to <b>private</b>! They'll have to <a href=\"https://imgur.com/a/P6Dcm\" class=\"alert-link\">set their subscriptions to <b>public</b></a> before they can be compared here.";
 
 	public function compare(Request $request, Response $response) {
 		$user1 = $request->getParam('user1');
 		$user2 = $request->getParam('user2');
+
+		if (!$user1) {
+			$this->container->flash->addMessage('danger', sprintf(self::PARAMETER_MISSING, 1));
+			return $response->withRedirect($this->container->router->pathFor('home'));	
+		}
+
+		if (!$user2) {
+			$this->container->flash->addMessage('danger', sprintf(self::PARAMETER_MISSING, 2));
+			return $response->withRedirect($this->container->router->pathFor('home'));	
+		}
+
+		$user1 = trim($user1);
+		$user2 = trim($user2);
+
+		if (substr($user1, 0, 2) != 'UC') $user1 = 'UC' . $user1;
+		if (substr($user2, 0, 2) != 'UC') $user2 = 'UC' . $user2;
+
+		if ($user1 == $user2) {
+			$this->container->flash->addMessage('warning', "<b>Hey!</b> Comparing the same channel would be meaningless!");
+			return $response->withRedirect($this->container->router->pathFor('home'));			
+		}
 
 		try {
 			$user1Name = $this->getChannelNameFromID($user1);
