@@ -29,7 +29,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 					<form action="{{ path_for('compare') }}" method="get">
 						<div class="form-group">
 							<label for="user1">User 1</label>
-							<input type="text" class="form-control" id="user1" name="user1" placeholder="UCXXXXXXXXXXXXXXXXXXXXXX">
+							<input type="text" class="form-control" id="user1" name="user1" placeholder="UCXXXXXXXXXXXXXXXXXXXXXX" value="{{ old.user1 }}">
 							<p class="help-block">
 								This is the YouTube user's <b>channel ID</b>, which should start with <code>UC</code>. If you aren't sure how to get that, please <a href="https://imgur.com/a/P6Dcm" target="_blank">click here</a>.
 							</p>
@@ -37,7 +37,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 						<div class="form-group">
 							<label for="user2">User 2</label>
-							<input type="text" class="form-control" id="user2" name="user2" placeholder="UCXXXXXXXXXXXXXXXXXXXXXX">
+							<input type="text" class="form-control" id="user2" name="user2" placeholder="UCXXXXXXXXXXXXXXXXXXXXXX" value="{{ old.user2 }}">
 						</div>
 
 						<button type="submit" class="btn btn-default">Submit</button>

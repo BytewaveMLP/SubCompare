@@ -6,4 +6,5 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-$app->add(new SubCompare\Middleware\ActiveRouteMiddleware($container));
+$app->add(new \SubCompare\Middleware\ActiveRouteMiddleware($container));
+$app->add(new \SubCompare\Middleware\OldInputMiddleware($container));
