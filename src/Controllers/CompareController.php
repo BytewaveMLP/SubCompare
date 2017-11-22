@@ -29,12 +29,12 @@ class CompareController extends Controller {
 
 		if (!$user1) {
 			$this->container->flash->addMessage('danger', sprintf(self::PARAMETER_MISSING, 1));
-			return $response->withRedirect($this->container->router->pathFor('home'));	
+			return $response->withRedirect($this->container->router->pathFor('home'));
 		}
 
 		if (!$user2) {
 			$this->container->flash->addMessage('danger', sprintf(self::PARAMETER_MISSING, 2));
-			return $response->withRedirect($this->container->router->pathFor('home'));	
+			return $response->withRedirect($this->container->router->pathFor('home'));
 		}
 
 		$user1 = trim($user1);
@@ -45,7 +45,7 @@ class CompareController extends Controller {
 
 		if ($user1 == $user2) {
 			$this->container->flash->addMessage('warning', "<b>Hey!</b> Comparing the same channel would be meaningless!");
-			return $response->withRedirect($this->container->router->pathFor('home'));			
+			return $response->withRedirect($this->container->router->pathFor('home'));
 		}
 
 		try {
