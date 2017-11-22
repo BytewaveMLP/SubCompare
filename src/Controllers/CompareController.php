@@ -10,18 +10,34 @@ namespace SubCompare\Controllers;
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
+use \ParagonIE\Certainty\RemoteFetch;
+use \GuzzleHttp\Client as GuzzleClient;
+use \GuzzleHttp\Exception\ClientException as GuzzleClientException;
 
 class CompareController extends Controller {
 	const CACHE_EXPIRE_AFTER = 60 * 60 * 6;
 
 	const GUZZLE_DEFAULT_OPTIONS = [
-		'verify' => false, // TODO: Make this true once cacert.pem stops being annoying
 		'http_errors' => true,
 	];
 
 	const PARAMETER_MISSING = "<b>Um...</b> Seems like you're missing user %d's ID.";
 	const COULDNT_FIND_USER = "<b>Whoops!</b> Looks like we couldn't find user %d! Verify that the channel ID is correct, then try again.";
 	const USER_SUBS_PRIVATE = "<b>Whoops!</b> Looks like user %d's subscriptions settings are set to <b>private</b>! They'll have to <a href=\"https://imgur.com/a/P6Dcm\" class=\"alert-link\">set their subscriptions to <b>public</b></a> before they can be compared here.";
+
+	private $guzzle;
+	private $guzzleParams;
+
+	public function __construct($container) {
+		parent::__construct($container);
+
+		$fetcher = new RemoteFetch();
+		$latestCACertBundle = $fetcher->getLatestBundle();
+		$this->guzzle = new GuzzleClient();
+		$this->guzzleParams = array_merge(self::GUZZLE_DEFAULT_OPTIONS, [
+			'verify' => $latestCACertBundle->getFilePath(),
+		]);
+	}
 
 	public function compare(Request $request, Response $response) {
 		$user1 = $request->getParam('user1');
@@ -64,14 +80,14 @@ class CompareController extends Controller {
 
 		try {
 			$user1Subs = $this->getUserSubscriptions($user1);
-		} catch (\GuzzleHttp\Exception\ClientException $e) {
+		} catch (GuzzleClientException $e) {
 			$this->container->flash->addMessage('danger', sprintf(self::USER_SUBS_PRIVATE, 1));
 			return $response->withRedirect($this->container->router->pathFor('home'));
 		}
 		
 		try {
 			$user2Subs = $this->getUserSubscriptions($user2);
-		} catch (\GuzzleHttp\Exception\ClientException $e) {
+		} catch (GuzzleClientException $e) {
 			$this->container->flash->addMessage('danger', sprintf(self::COULDNT_FIND_USER, 2));
 			return $response->withRedirect($this->container->router->pathFor('home'));
 		}
@@ -103,8 +119,7 @@ class CompareController extends Controller {
 		if ($this->container->cache->hasItem($cacheName) && $this->container->cache->getItem($cacheName)->isHit()) {
 			return $this->container->cache->getItem($cacheName)->get();
 		} else {
-			$client = new \GuzzleHttp\Client();
-			$params = array_merge(self::GUZZLE_DEFAULT_OPTIONS, [
+			$params = array_merge($this->guzzleParams, [
 				'query' => [
 					'part' => 'snippet',
 					'id' => $channelID,
@@ -112,7 +127,7 @@ class CompareController extends Controller {
 				],
 			]);
 
-			$response = $client->get('https://www.googleapis.com/youtube/v3/channels', $params);
+			$response = $this->guzzle->get('https://www.googleapis.com/youtube/v3/channels', $params);
 
 			if ($response->getStatusCode() == 200) {
 				$body = json_decode((string) $response->getBody(), true);
@@ -140,22 +155,20 @@ class CompareController extends Controller {
 		if ($this->container->cache->hasItem($cacheName) && $this->container->cache->getItem($cacheName)->isHit()) {
 			return $this->container->cache->getItem($cacheName)->get();
 		} else {
-			$client = new \GuzzleHttp\Client();
-			$params = array_merge(self::GUZZLE_DEFAULT_OPTIONS, [
+			$params = array_merge($this->guzzleParams, [
 				'query' => [
 					'part' => 'snippet',
 					'channelId' => $channelID,
 					'maxResults' => 50,
 					'key' => getenv('YT_API_KEY'),
 				],
-				'verify' => false,
 			]);
 			
 			if ($page) {
 				$params['query']['pageToken'] = $page;
 			}
 
-			$response = $client->get('https://www.googleapis.com/youtube/v3/subscriptions', $params);
+			$response = $this->guzzle->get('https://www.googleapis.com/youtube/v3/subscriptions', $params);
 			if ($response->getStatusCode() == 200) {
 				$body = json_decode((string) $response->getBody(), true);
 
